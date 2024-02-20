@@ -1,4 +1,3 @@
-import { useMemo } from "react";
 import {
   styled,
   alpha,
@@ -11,7 +10,6 @@ import {
   Stack,
   CssBaseline,
   Grid,
-  Divider,
 } from "@mui/material";
 import MenuIcon from "@mui/icons-material/Menu";
 import SearchIcon from "@mui/icons-material/Search";
