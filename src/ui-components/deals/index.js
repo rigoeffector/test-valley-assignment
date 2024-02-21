@@ -16,7 +16,7 @@ import { useDispatch, useSelector } from "react-redux";
 import StarIcon from "@mui/icons-material/Star";
 import { GET_ALL_PRODUCTS_LIST_REQUEST } from "../../reducers/all-products/constant";
 function Content(props) {
-  const { body, title, imageUrl, rating } = props;
+  const { title, imageUrl, rating } = props;
   return (
     <div tabIndex="0">
       <Box>

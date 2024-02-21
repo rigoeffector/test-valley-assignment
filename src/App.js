@@ -1,4 +1,4 @@
-import { Box, Grid, Typography } from "@mui/material";
+import { Box } from "@mui/material";
 import "./App.css";
 import CarouselHeaderUI from "./ui-components/carousels";
 import HeaderBarMenu from "./ui-components/header";
