@@ -132,7 +132,7 @@ export default function DealsCarousel({ isFilterEnabled, title, subTitle }) {
           isPlaying={true}
           totalSlides={
             isFilterEnabled
-              ? filteredItems[0].items?.length
+              ? filteredItems?.[0]?.items?.length
               : getAllProducts &&
                 getAllProducts?.data &&
                 getAllProducts?.data?.totalCount
@@ -206,7 +206,7 @@ export default function DealsCarousel({ isFilterEnabled, title, subTitle }) {
                   {getAllProducts && getAllProducts?.loading ? (
                     <CircularProgress />
                   ) : isFilterEnabled ? (
-                    filteredItems[0].items?.map((p, i) => (
+                    filteredItems?.[0]?.items?.map((p, i) => (
                       <Slide className="slide" index={i}>
                         <Content
                           body=""
