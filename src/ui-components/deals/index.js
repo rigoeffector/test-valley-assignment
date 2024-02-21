@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import "./styles.css";
 import {
   CarouselProvider,
@@ -27,15 +27,19 @@ function Content(props) {
           }}
           id="slide_img"
         >
-          <Box component="img" src={imageUrl}  sx={{
-                borderRadius: '8px'
-          }}/>
+          <Box
+            component="img"
+            src={imageUrl}
+            sx={{
+              borderRadius: "8px",
+            }}
+          />
           <Box
             id="rtn"
             sx={{
               position: "absolute",
               background: "rgb(0, 158, 138)",
-              top: "61%",
+              top: "58%",
               left: "5%",
               zIndex: "1",
               borderRadius: "2px",
@@ -94,17 +98,30 @@ function Content(props) {
 export default function DealsCarousel({ isFilterEnabled, title, subTitle }) {
   const dispatch = useDispatch();
   const { getAllProducts } = useSelector((state) => state);
+  const [filteredItems, setFilteredItems] = useState([]);
   useEffect(() => {
-    if (!isFilterEnabled) dispatch({ type: GET_ALL_PRODUCTS_LIST_REQUEST });
-  }, [dispatch, isFilterEnabled]);
-  console.log(getAllProducts);
+    dispatch({ type: GET_ALL_PRODUCTS_LIST_REQUEST });
+  }, [dispatch]);
+  // console.log(getAllProducts);
+
+  useEffect(() => {
+    if (isFilterEnabled) {
+      const deals = getAllProducts?.data?.items.filter(
+        (allProducts) =>
+          allProducts.viewType === "TILE" && allProducts.type === "SINGLE"
+      );
+      setFilteredItems(deals);
+    }
+  }, [getAllProducts?.data?.items, isFilterEnabled]);
   return (
     <Box>
       {getAllProducts && getAllProducts?.loading ? (
-        <Box sx={{display:'flex', justifyContent:'center'}}>
-        <CircularProgress  sx={{
-            color : '#02d095'
-        }}/>
+        <Box sx={{ display: "flex", justifyContent: "center" }}>
+          <CircularProgress
+            sx={{
+              color: "#02d095",
+            }}
+          />
         </Box>
       ) : (
         <CarouselProvider
@@ -114,9 +131,11 @@ export default function DealsCarousel({ isFilterEnabled, title, subTitle }) {
           infinite
           isPlaying={true}
           totalSlides={
-            getAllProducts &&
-            getAllProducts?.data &&
-            getAllProducts?.data?.totalCount
+            isFilterEnabled
+              ? filteredItems[0].items?.length
+              : getAllProducts &&
+                getAllProducts?.data &&
+                getAllProducts?.data?.totalCount
           }
           // This number can be float to let next slide show
           visibleSlides={3.25}
@@ -186,6 +205,17 @@ export default function DealsCarousel({ isFilterEnabled, title, subTitle }) {
                 <Slider classNameTray="tray">
                   {getAllProducts && getAllProducts?.loading ? (
                     <CircularProgress />
+                  ) : isFilterEnabled ? (
+                    filteredItems[0].items?.map((p, i) => (
+                      <Slide className="slide" index={i}>
+                        <Content
+                          body=""
+                          title={p.publication?.productName}
+                          imageUrl={p.publication?.media[0]?.uri}
+                          rating={p.publication?.rating}
+                        />
+                      </Slide>
+                    ))
                   ) : (
                     getAllProducts &&
                     getAllProducts.data &&
@@ -193,7 +223,7 @@ export default function DealsCarousel({ isFilterEnabled, title, subTitle }) {
                     getAllProducts?.data?.items.map((p, i) => (
                       <Slide className="slide" index={i}>
                         <Content
-                          body="I am the third Slide."
+                          body=""
                           title={p.title}
                           imageUrl={p.thumbnail?.uri}
                           rating={p.rating}
